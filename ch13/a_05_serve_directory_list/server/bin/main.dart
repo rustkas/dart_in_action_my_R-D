@@ -5,4 +5,4 @@ Future main(List<String> arguments) async {
   await listen();
 }
 
-// dart bin/maint.dart
+// dart bin/main.dart
