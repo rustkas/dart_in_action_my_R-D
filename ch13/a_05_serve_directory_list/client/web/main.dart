@@ -27,10 +27,15 @@ void loadFolderList(String folderName) {
     HttpRequest.getString(url).then((responce) {
       final jsonData = responce;
 
-      final result = jsonDecode(jsonData)  as Map;
+      final result = jsonDecode(jsonData) as Map;
       print(result);
       updateFolderList(result['dirs']);
       updateFileList(result['files']);
+    }).catchError((e) {
+      print('Got error: ${e}');
+    
+      
+      return Future.value(null);
     });
   }
 }
@@ -59,6 +64,9 @@ void updateFileList(List<dynamic> files) {
         final jsonData = responce;
         final contentText = jsonDecode(jsonData)['content'];
         document.getElementById('fileContent').text = contentText;
+      }).catchError((e) {
+        print('Got error: ${e.error}');
+        return -1;
       });
     });
     content.nodes.add(link);
