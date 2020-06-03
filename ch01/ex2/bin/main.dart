@@ -1,4 +1,4 @@
-void main(List<String> arguments) {
+void main() {
   print(r'2 + 2 = ?');
   //print(r'\n');
   print('\n');

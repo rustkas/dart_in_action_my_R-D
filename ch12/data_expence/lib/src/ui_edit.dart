@@ -11,7 +11,7 @@ class EditView implements View {
   @override
   DivElement actions;
 
-  int _id;
+  // int _id;
   Expense _expense;
 
   EditView(Expense expense) {

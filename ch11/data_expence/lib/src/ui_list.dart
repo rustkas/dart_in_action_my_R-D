@@ -13,7 +13,6 @@ class ListView implements View {
 
   ListView(List<Expense> expenses) {
     refreshUi(expenses);
-    // refreshUi_usingDynamicTable(expenses);
     _buildActions();
   }
 

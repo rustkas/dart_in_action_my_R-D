@@ -1,4 +1,4 @@
-void main(List<String> arguments) {
+void main() {
   // вызов toString()
   var object = Object();
   print('$object');

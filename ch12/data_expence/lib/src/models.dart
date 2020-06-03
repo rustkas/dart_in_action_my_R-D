@@ -71,7 +71,7 @@ class Expense<K, V> implements JsonSerializable, Map {
   /// convert the object into a json string
   @override
   String toJson() {
-    return JsonEncoder().convert(toMap());
+    return jsonEncode(toMap());
   }
 
   @override

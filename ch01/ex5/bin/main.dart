@@ -1,14 +1,17 @@
-void main(List<String> arguments) {
+import 'dart:io';
+
+void main() {
   var messageA;
   var messageB = 'Привет';
 
   print('$messageA');
   print('$messageB');
 
-  final messageC = 'Как тебе Dart?';
+  final messageC = 'Как тебя зовут?';
   print('$messageC');
 
-  //final String messageD = 'Отлично!';
-  //print('$messageD');
+ final input = stdin.readLineSync();
+  stdout.writeln('Желаю Тебе успехов в изучении Dart, $input!');
 
 }
+// dart bin/main.dart

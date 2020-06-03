@@ -1,12 +1,16 @@
 import 'dart:html';
 
 void main() {
-  var children = document.body.children;
-  InputElement itemInput = Element.tag('input');
+  
+  final InputElement itemInput = Element.tag('input');
+  final ButtonElement addButton = Element.tag('button');
+  final children = document.body.children;
+
   itemInput.placeholder = 'Enter an item';
-  ButtonElement addButton = Element.tag('button');
-  addButton.text = 'Add';
-  addButton.id = 'add-btn';
+  
+  addButton
+    ..text = 'Add'
+    ..id = 'add-btn';
   children
     ..add(Element.html('<h2>PackList</h2>'))
     ..add(itemInput)

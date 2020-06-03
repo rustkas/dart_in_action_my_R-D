@@ -1,4 +1,4 @@
-void main(List<String> arguments) {
+void main() {
   final userLogons = usingPutIfAbsent();
   print(userLogons);
 }

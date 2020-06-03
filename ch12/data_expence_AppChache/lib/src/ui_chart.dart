@@ -14,7 +14,6 @@ class ChartView implements View {
   ButtonElement returnToListButton;
 
   ChartView(this.expenseSummary) {
-    //_addGoogleAPI();
     _buildViewWithInjection();
     _buildActions();
   }

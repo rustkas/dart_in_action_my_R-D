@@ -1,4 +1,3 @@
-
 import 'user.dart';
 
 class EnterpriseUser extends User {
@@ -21,7 +20,7 @@ class EnterpriseUser extends User {
 
   @override
   bool isPasswordValid(String newPassword) {
-// опущено... сравнение с последними 5 паролями
+  // опущено... сравнение с последними 5 паролями
     return super.isPasswordValid(newPassword);
   }
 

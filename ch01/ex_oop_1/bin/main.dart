@@ -1,6 +1,6 @@
 import 'package:ex_oop_1/coords.dart';
 
-void main(List<String> arguments) {
+void main() {
   var coords1 = Coords.xyz();
   print('$coords1. Расстояние: ${coords1.getDistance()}');
 

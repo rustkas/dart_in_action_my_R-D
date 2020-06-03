@@ -6,19 +6,22 @@ void main() {
   bodyList.add(title);
 
   final itemInput = InputElement();
-  itemInput.id = 'txt-item';
-  itemInput.placeholder = 'Enter an item';
+  itemInput
+    ..id = 'txt-item'
+    ..placeholder = 'Enter an item';
   bodyList.add(itemInput);
 
   final addButton = ButtonElement();
-  addButton.id = 'btn-add';
-  addButton.text = 'Add';
+  addButton
+   ..id = 'btn-add'
+   ..text = 'Add';
   bodyList.add(addButton);
 
   final itemContainer = DivElement();
-  itemContainer.id = 'items';
-  itemContainer.style.width = '300px';
-  itemContainer.style.border = '1px solid black';
-  itemContainer.innerHtml = '&nbsp;';
+  itemContainer
+    ..id = 'items'
+    ..style.width = '300px'
+    ..style.border = '1px solid black'
+    ..innerHtml = '&nbsp;';
   bodyList.add(itemContainer);
 }

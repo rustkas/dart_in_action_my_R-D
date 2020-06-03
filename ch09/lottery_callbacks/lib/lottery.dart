@@ -1,13 +1,11 @@
 library lottery;
 
 import 'dart:async';
-import 'dart:math';
+import 'dart:math' show Random;
 
 typedef Callback = void Function(int winningNumber);
 final r = Random();
 void getWinningNumber(Callback callback) {
-  
-
   final millisecs = r.nextInt(2000) + 10;
   print('waiting: $millisecs ms');
   Timer(Duration(milliseconds: millisecs), () {
@@ -29,16 +27,3 @@ String getResultsString(List<int> results, String message) {
 
   return str.toString();
 }
-
-// Future<String> slowlySortResults(List<int> results) {
-//   Completer completer = Completer<String>();
-//   Timer(Duration(seconds: 2), () {
-//     results.sort((val1, val2) => val1 < val2 ? -1 : 1);
-
-//     var str = getResultsString(results, 'Confirmed numbers are: ');
-
-//     completer.complete(str);
-//   });
-
-//   return completer.future;
-// }

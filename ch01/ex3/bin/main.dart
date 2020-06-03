@@ -1,4 +1,4 @@
-void main(List<String> arguments) {
+void main() {
   print('''
 Белеет парус одинокой
 В тумане моря голубом!..

@@ -1,8 +1,7 @@
 import 'dart:html';
 
 void main() {
-  //querySelector('#output').text = 'Your Dart app is running.';
-  var button = ButtonElement();
+  final button = ButtonElement();
   button.text = 'Нажми';
   button.onClick.listen((event) {
     List buttonList = querySelectorAll('button');

@@ -2,7 +2,7 @@ library lottery;
 
 import 'dart:async';
 
-import 'dart:math';
+import 'dart:math' show Random;
 
 final r = Random();
 Future<int> getFutureWinningNumber() {

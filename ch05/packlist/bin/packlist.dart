@@ -1,5 +1,6 @@
 import 'package:packlist/packlist.dart' as packlist;
-import '../../loglib/lib/loglib.dart' as loglib;
+import 'package:loglib/loglib.dart' as loglib;
+
 void main() {
   print('Hello world: ${packlist.calculate()}!');
   loglib.info('hello');

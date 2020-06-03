@@ -1,7 +1,7 @@
 library lottery;
 
 import 'dart:async';
-import 'dart:math';
+import 'dart:math' show Random;
 
 typedef Callback = void Function(int winningNumber);
 final r = Random();

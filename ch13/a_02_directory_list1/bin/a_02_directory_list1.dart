@@ -20,10 +20,6 @@ void main(List<String> arguments) {
 }
 
 void printHelp() {
-//   print('''
-// Dart Directory Lister. Usage:
-// List files and directories: --list DIR
-// Output file to console : --out FILE''');
   print('Dart Directory Lister');
   print(parser.usage);
 }

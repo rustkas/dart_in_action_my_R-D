@@ -7,6 +7,7 @@ class AppController {
   final DataAccess _appData;
   final DivElement _uiRoot;
   final Map<ViewType, View> _viewCache;
+  Map<ViewType, View> get viewCache => _viewCache;
   DivElement _content;
   DivElement _actions;
 
@@ -83,31 +84,6 @@ class AppController {
     return result;
   }
 
-  // EditView getEditView(int id) {
-  //   // if id is null, then create a expense, otherwise get the existing expense
-  //   Expense expenseToEdit;
-  //   if (id != null) {
-  //     expenseToEdit = getExpenseById(id);
-  //   } else {
-  //     expenseToEdit = Expense();
-  //   }
-
-  //   return EditView(expenseToEdit); // create a view
-  // }
-
-  // ListView getListView() {
-  //   var view;
-
-  //   if (_viewCache.containsKey(ViewType.LIST)) {
-  //     view = _viewCache[ViewType.LIST]; // read from the cache
-  //     view.refreshUi(expenses);
-  //   } else {
-  //     view = ListView(expenses); // create a view
-  //     _viewCache[ViewType.LIST] = view; // and add to the cache
-  //   }
-
-  //   return view;
-  // }
 }
 
 abstract class View {

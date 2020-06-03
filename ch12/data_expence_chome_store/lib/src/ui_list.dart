@@ -13,7 +13,6 @@ class ListView implements View {
 
   ListView(List<Expense> expenses) {
     refreshUi(expenses);
-    // refreshUi_usingDynamicTable(expenses);
     _buildActions();
   }
 
@@ -31,7 +30,6 @@ class ListView implements View {
             <td class="edit">&nbsp;</td>
           </thead>''');
 
-    // tableElement.children.add(head);
     tableElement.nodes.addAll(head.nodes);
     for (var ex in expenses) {
       tableElement.children.add(_getRowElement(ex));

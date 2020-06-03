@@ -2,7 +2,7 @@
 
 
 class Greeter {
-  var  _greeterPrivate='Hello';
+  final  _greeterPrivate='Hello';
 
   @override
   String toString() {

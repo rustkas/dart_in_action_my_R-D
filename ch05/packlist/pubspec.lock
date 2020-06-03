@@ -134,6 +134,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.11.4"
+  loglib:
+    dependency: "direct main"
+    description:
+      path: "../loglib"
+      relative: true
+    source: path
+    version: "0.0.0"
   matcher:
     dependency: transitive
     description:

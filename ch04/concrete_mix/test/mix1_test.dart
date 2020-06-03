@@ -14,7 +14,7 @@ void main() {
     var mortar = mix(cement, sand);
     var dryConcrete = mix(mortar, gravel);
     print(mortar.bags);
-    // print(dryConcrete);
+    print(dryConcrete);
     // expect(mortar.bags, equals(6));
     // expect(dryConcrete.bags, equals(12));
   });

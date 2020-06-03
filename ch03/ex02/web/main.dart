@@ -1,9 +1,9 @@
 import 'dart:html';
 
 void main() {
-  var childNodes = document.body.nodes;
+  final childNodes = document.body.nodes;
 
-  var divMultilineString = '''<div>
+  final divMultilineString = '''<div>
 <p>a multiline string</p>
 </div>''';
   final divMultilineElement = Element.html(divMultilineString);
@@ -12,7 +12,7 @@ void main() {
 /*
 
 */
-  var divMultilineString2 = '''<div>
+  final divMultilineString2 = '''<div>
 <p>a multiline string</p>
 </div>''';
   final divMultilineElement2 = Element.html(divMultilineString2);

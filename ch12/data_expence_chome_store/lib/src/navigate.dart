@@ -1,7 +1,5 @@
 import 'dart:html';
 
-
-
 import 'app.dart';
 import 'ui_chart.dart';
 import 'ui_edit.dart';

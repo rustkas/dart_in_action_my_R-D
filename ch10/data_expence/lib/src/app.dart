@@ -1,7 +1,5 @@
 import 'dart:html';
 
-
-
 import 'models.dart';
 import 'ui_edit.dart';
 import 'ui_list.dart';
@@ -99,9 +97,7 @@ class AppController {
     return view;
   }
 
-
 }
-
 
 abstract class View {
   DivElement rootElement;
@@ -129,7 +125,6 @@ abstract class DataAccess {
   List<Expense> get expenses;
   bool addOrUpdate(Expense expense);
 }
-
 
 AppController _app;
 AppController get app => _app;

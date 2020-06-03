@@ -3,7 +3,7 @@ bool trueIfNull(a,b){
   return a == null && b == null;
 }
 
-void main(List<String> arguments) {
+void main() {
   final nulls = trueIfNull(null, null);
   final ints = trueIfNull(1, 2);
   final doubles = trueIfNull(1.0, 2.0);

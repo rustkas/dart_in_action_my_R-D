@@ -1,7 +1,6 @@
 abstract class User {
   String _username;
-  String _existingPasswordHash;
-
+  
   User(this._username);
   User.byEmail(this._username);
 
@@ -24,12 +23,4 @@ abstract class User {
     return '$myType: $username';
   }
 
-  // @override
-  // dynamic noSuchMethod(Invocation name) {
-  //   if (name == 'get:password') {
-  //     return '*********';
-  //   } else if (name != 'set:password') {
-  //     super.noSuchMethod(name);
-  //   }
-  // }
 }

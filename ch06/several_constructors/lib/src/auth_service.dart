@@ -34,7 +34,7 @@ class EnterpriseAuthService implements AuthService {
     var authService = getFromCache(server, port);
     if (authService == null) {
       authService = EnterpriseAuthService();
-// опущено: настроить authService и подключиться
+      // some stuf
       addToCache(authService, server, port);
     }
     return authService;

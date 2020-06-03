@@ -26,13 +26,13 @@ void navigate(ViewType view,
   }
 }
 
-void _registerHistoryHandler() {
-  window.onPopState.listen((event) {
-    if (event.state != null) {
-      navigateFromPopstate(event.state);
-    }
-  });
-}
+// void _registerHistoryHandler() {
+//   window.onPopState.listen((event) {
+//     if (event.state != null) {
+//       navigateFromPopstate(event.state);
+//     }
+//   });
+// }
 
 /// extracts the view by name
 void navigateFromPopstate(String state) {
@@ -54,13 +54,13 @@ void navigateFromPopstate(String state) {
   }
 }
 
-String _getValueFromCookie(String cookieName) {
-  for (String cookieKV in document.cookie.split(';')) {
-    if (cookieKV.startsWith(cookieName)) {
-      print('Found location cookie:$cookieKV');
-      List cookie = cookieKV.split('=');
-      return cookie.length > 1 ? cookie[1] : '';
-    }
-  }
-  return '';
-}
+// String _getValueFromCookie(String cookieName) {
+//   for (String cookieKV in document.cookie.split(';')) {
+//     if (cookieKV.startsWith(cookieName)) {
+//       print('Found location cookie:$cookieKV');
+//       List cookie = cookieKV.split('=');
+//       return cookie.length > 1 ? cookie[1] : '';
+//     }
+//   }
+//   return '';
+// }

@@ -9,12 +9,12 @@ class AppController {
   DataAccess get appData => _appData;
 
   final DivElement _uiRoot;
-  // final Map<ViewType, View> _viewCache;
+  
   DivElement _content;
   DivElement _actions;
 
   AppController(this._uiRoot, this._appData);
-  //  : _viewCache = <ViewType, View>{};
+  
 
   List<Expense> get expenses => _appData.expenses;
   Map<String, ExpenseType> get expenseTypes => _appData.expenseTypes;

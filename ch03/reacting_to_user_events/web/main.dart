@@ -23,10 +23,11 @@ void main() {
   document.body.children.add(addButton);
 
   final itemContainer = DivElement();
-  itemContainer.id = 'items';
-  itemContainer.style.width = '300px';
-  itemContainer.style.border = '1px solid black';
-  itemContainer.innerHtml = '&nbsp;';
+  itemContainer
+    ..id = 'items'
+    ..style.width = '300px'
+    ..style.border = '1px solid black'
+    ..innerHtml = '&nbsp;';
   document.body.children.add(itemContainer);
 }
 

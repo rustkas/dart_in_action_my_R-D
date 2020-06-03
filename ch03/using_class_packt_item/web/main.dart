@@ -6,26 +6,29 @@ void main() {
   bodyList.add(title);
 
   final itemInput = InputElement();
-  itemInput.id = 'txt-item';
-  itemInput.placeholder = 'Enter an item';
-  itemInput.onKeyPress.listen((event) {
-    if (event.keyCode == 13) {
-      addItem();
-    }
-  });
+  itemInput
+    ..id = 'txt-item'
+    ..placeholder = 'Enter an item'
+    ..onKeyPress.listen((event) {
+      if (event.keyCode == 13) {
+        addItem();
+      }
+    });
   bodyList.add(itemInput);
 
   final addButton = ButtonElement();
-  addButton.id = 'btn-add';
-  addButton.text = 'Add';
-  addButton.onClick.listen((event) => addItem());
+  addButton
+    ..id = 'btn-add'
+    ..text = 'Add'
+    ..onClick.listen((event) => addItem());
   bodyList.add(addButton);
 
   final itemContainer = DivElement();
-  itemContainer.id = 'items';
-  itemContainer.style.width = '300px';
-  itemContainer.style.border = '1px solid black';
-  itemContainer.innerHtml = '&nbsp;';
+  itemContainer
+    ..id = 'items'
+    ..style.width = '300px'
+    ..style.border = '1px solid black'
+    ..innerHtml = '&nbsp;';
   bodyList.add(itemContainer);
 }
 
