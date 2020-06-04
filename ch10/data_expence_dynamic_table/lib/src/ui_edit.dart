@@ -5,7 +5,6 @@ import 'models.dart';
 import 'navigate.dart';
 
 class EditView implements View {
-  
   @override
   DivElement rootElement;
   @override
@@ -33,9 +32,6 @@ class EditView implements View {
         <label for='expenseDate'>Date</label>${_getDate(_expense.date)}<br/>
         <label for='expenseAmount'>Amount</label>${_getAmount(_expense.amount)}</br>
         <label for='expenseDetail'>Detail</label>${_getDetail(_expense.detail)}  
-        <label for='expenseClaimed'>Claimed?</label><select id='expenseClaimed'>
-          ${_getClaimed(_expense.isClaimed)}
-        </select>
       </div>
           ''');
   }
@@ -73,7 +69,6 @@ class EditView implements View {
     InputElement amountEl = document.getElementById('expenseAmount');
     TextAreaElement detailEl = document.getElementById('expenseDetail');
     SelectElement typeEl = document.getElementById('expenseTypes');
-    SelectElement isClaimed = document.getElementById('expenseClaimed');
 
     if (dateEl.value != '') {
       expense.date = DateTime.parse(dateEl.value);
@@ -90,10 +85,6 @@ class EditView implements View {
       final typeCode = option.value;
       expense.type = app.expenseTypes[typeCode];
     }
-    if (isClaimed.value != '') {
-      expense.isClaimed =
-          isClaimed.value.toLowerCase() == 'true' ? true : false;
-    }
 
     print(expense.toJson());
     app.addOrUpdate(expense);
@@ -101,24 +92,6 @@ class EditView implements View {
 }
 
 // UTILITY FUNCTIONS
-
-String _getClaimed(bool isClaimed) {
-  final result = StringBuffer();
-
-  if (isClaimed) {
-    result.write(
-        "<option value='${true.toString()}' selected='selected'>${true.toString()}</option>");
-    result.write(
-        "<option value='${false.toString()}'>${false.toString()}</option>");    
-  } else {
-    result.write(
-        "<option value='${true.toString()}'>${true.toString()}</option>");
-    result.write(
-        "<option value='${false.toString()}' selected='selected'>${false.toString()}</option>");
-  }
-  
-  return result.toString();
-}
 
 String _getOptions(ExpenseType selectedExpenseType) {
   final result = StringBuffer();

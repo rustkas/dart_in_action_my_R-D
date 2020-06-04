@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 abstract class JsonSerializable {
-  /// convert the object into a json string  
+  /// convert the object into a json string
   String toJson();
 }
 
@@ -14,11 +14,13 @@ class Expense implements JsonSerializable {
   num amount = 0;
   String detail;
   bool isClaimed = false;
+  List<Action> itemActions;
 
   /// ctor
   /// set the next id value
   Expense() {
     _id = _getNextId();
+    itemActions = [];
   }
 
   /// ctor
@@ -36,6 +38,12 @@ class Expense implements JsonSerializable {
     if (values.containsKey('expenseTypeName')) {
       type = ExpenseType(values['expenseTypeName'], values['expenseTypeCode']);
     }
+    if (values.containsKey('expenseActions')) {
+      itemActions = <Action>[];
+      for (var item in values['expenseActions']) {
+        itemActions.add(Action(item['name']));
+      }
+    }
   }
 
   @override
@@ -52,7 +60,9 @@ class Expense implements JsonSerializable {
       values['expenseTypeName'] = type.name;
       values['expenseTypeCode'] = type.code;
     }
-
+    if (itemActions != null) {
+      values['expenseActions'] = itemActions;
+    }
     return jsonEncode(values);
   }
 
@@ -82,6 +92,24 @@ class ExpenseType {
   bool operator ==(other) {
     if (other is ExpenseType) {
       return name == other.name && code == other.code;
+    }
+    return false;
+  }
+}
+
+/// Used to list the types of actions
+class Action {
+  final String name;
+  const Action(this.name);
+  @override
+  String toString() {
+    return '$name';
+  }
+
+  @override
+  bool operator ==(other) {
+    if (other is Action) {
+      return name == other.name;
     }
     return false;
   }

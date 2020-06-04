@@ -1,6 +1,7 @@
 import 'dart:html';
 
 import 'app.dart';
+import 'genericListView.dart';
 import 'models.dart';
 import 'navigate.dart';
 
@@ -11,29 +12,37 @@ class ListView implements View {
   DivElement actions;
 
   ListView(List<Expense> expenses) {
-    refreshUi(expenses);
+    refreshUi_usingDynamicTable(expenses);
     _buildActions();
   }
+  static const title = 'title';
+  static const css_class = 'class';
+  static const map_key = 'key';
+  static const map_value = 'value';
 
-  void refreshUi(List<Expense> expenses) {
+  static const titleInfo = <String, Map<String, String>>{
+    'type': <String, String>{title: 'Type', css_class: 'type'},
+    'date': <String, String>{title: 'Date', css_class: 'date'},
+    'detail': <String, String>{title: 'Detail', css_class: 'detail'},
+    'amount': <String, String>{title: 'Amount', css_class: 'amount'},
+    'claimed': <String, String>{title: 'Claimed?', css_class: 'claimed'},
+    'edit': <String, String>{title: '&nbsp;', css_class: 'edit'},
+    'delete': <String, String>{title: '&nbsp;', css_class: 'delete'},
+  };
+
+  void refreshUi_usingDynamicTable(List<Expense> expenses) {
     _updateRootElement();
 
-    final tableElement = TableElement();
-    final head = tableElement.createFragment('''
-          <thead>
-            <td class="type">Type</td>
-            <td class="date">Date</td>
-            <td class="detail">Item</td>
-            <td class="amount">Amount</td>
-            <td class="claimed">Claimed?</td>
-            <td class="edit">&nbsp;</td>
-          </thead>''');
-
-    // tableElement.children.add(head);
-    tableElement.nodes.addAll(head.nodes);
-    for (var ex in expenses) {
-      tableElement.children.add(_getRowElement(ex));
-    }
+    var columnConfig = <String, GetValueFunc>{};
+    columnConfig['type'] = (Expense expense) => expense.type.name;
+    columnConfig['date'] = (Expense expense) => expense.date.toString();
+    columnConfig['detail'] = (Expense expense) => expense.detail;
+    columnConfig['amount'] = (Expense expense) => expense.amount.toString();
+    columnConfig['isClaimed'] =
+        (Expense expense) => expense.isClaimed.toString();
+    columnConfig['itemAction'] =
+        (Expense expense) => expense.itemActions.toString();
+    final tableElement = getDynamicTable(expenses, columnConfig);
 
     rootElement.children.add(tableElement);
   }
@@ -101,11 +110,12 @@ TableRowElement _getRowElement(Expense ex) {
         '<td>${ex.date.day}-${ex.date.month}-${ex.date.year}</td>'))
     ..add(row.createFragment('<td>${ex.detail}</td>'))
     ..add(row.createFragment('<td>${ex.amount}</td>'))
-  ..add(row.createFragment('<td>${_getIsClaimed(ex.isClaimed)}</td>'));
+    ..add(row.createFragment('<td>${_getIsClaimed(ex.isClaimed)}</td>'));
 
-  final editCol = row.createFragment("<td class='edit'><button>Edit...</button></td>");
-  
-  final button = editCol.children.elementAt(0);
+  final editCol = row.createFragment("<td class='edit'></td>");
+  final button = ButtonElement();
+  button.text = 'Edit...';
+  editCol.children.add(button);
   row.nodes.add(editCol);
 
   button.onClick.listen((e) {

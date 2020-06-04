@@ -23,7 +23,7 @@ void main() {
     num3_button.text = num3.toString();
   });
 
-  var resetButton = ButtonElement();
+  final resetButton = ButtonElement();
   resetButton.text='Replay';
   bodyList.add(resetButton);
   resetButton.onClick.listen((e) {

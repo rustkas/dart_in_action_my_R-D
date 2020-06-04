@@ -24,13 +24,13 @@ void getWinningNumber(void Function(int winningNumber) callback) {
     callback(number);
   });
 }
+
 String getResultsString(List<int> results, String message) {
   var str = StringBuffer();
   str.write(message);
 
   for (var i = 0; i < results.length; i++) {
-    var currentResult = results[i];
-    str.write(currentResult);
+    str.write(results[i]);
     if (i != results.length - 1) str.write(', ');
   }
 

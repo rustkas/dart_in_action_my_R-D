@@ -8,6 +8,7 @@ List<Expense> getMockExpenses() {
     ..amount = 40.0
     ..detail = 'Dart in Action'
     ..date = DateTime(2012, 07, 22, 10, 15, 55, 100)
+    ..itemActions = [Action('edit'),Action('delete')]
     ..isClaimed = true;
   expenses.add(expense);
 
@@ -16,6 +17,7 @@ List<Expense> getMockExpenses() {
     ..amount = 50.0
     ..detail = 'Taxi from airport'
     ..date = DateTime(2012, 07, 23, 10, 15, 55, 100)
+    ..itemActions = [Action('edit'),Action('delete')]
     ..isClaimed = false;
   expenses.add(expense);
 

@@ -30,8 +30,7 @@ String getResultsString(List<int> results, String message) {
   str.write(message);
 
   for (var i = 0; i < results.length; i++) {
-    var currentResult = results[i];
-    str.write(currentResult);
+    str.write(results[i]);
     if (i != results.length - 1) str.write(', ');
   }
 
