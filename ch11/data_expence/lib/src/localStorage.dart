@@ -36,10 +36,7 @@ class LocalStorage implements DataAccess {
 
   LocalStorage() :
     expenseTypes = loadExpenseTypes(getMockExpenseTypes) // passing in the function in library scope
-  {
-
-  }
-
+;
   /// add to the list. Returns true if it was adeed
   /// returns false if edited
   @override

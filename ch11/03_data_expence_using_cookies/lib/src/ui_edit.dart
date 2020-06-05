@@ -10,7 +10,7 @@ class EditView implements View {
   @override
   DivElement actions;
 
-  int _id;
+  // int _id;
   Expense _expense;
 
   EditView(Expense expense) {
@@ -32,8 +32,9 @@ class EditView implements View {
         <label for='expenseDate'>Date</label>${_getDate(_expense.date)}<br/>
         <label for='expenseAmount'>Amount</label>${_getAmount(_expense.amount)}</br>
         <label for='expenseDetail'>Detail</label>${_getDetail(_expense.detail)}  
+        <fieldset><legend>Row actions</legend>${_getActions(_expense.itemActions)}</fieldset>
       </div>
-          ''');
+      ''');
   }
 
   void _buildActions() {
@@ -43,30 +44,32 @@ class EditView implements View {
   }
 
   Element _getSaveButton() {
-    var saveButton = ButtonElement();
-    saveButton.text = 'Save';
-    saveButton.onClick.listen((e) {
-      // read the values from the form back to the object
-      // uses expense object in the function local scope
-      _saveDetails(_expense);
-      navigate(ViewType.list, null);
-    });
-    
+    final saveButton = ButtonElement();
+    saveButton
+      ..text = 'Save'
+      ..onClick.listen((e) {
+        // read the values from the form back to the object
+        // uses expense object in the function local scope
+        _saveDetails(_expense);
+        navigate(ViewType.list, null);
+      });
     return saveButton;
   }
 
- Element _getCancelButton() {
-    var cancelButton = ButtonElement();
-    cancelButton.text = 'Cancel';
-    cancelButton.onClick.listen((e) => navigate(ViewType.list,null));
+  Element _getCancelButton() {
+    final cancelButton = ButtonElement();
+    cancelButton
+      ..text = 'Cancel'
+      ..onClick.listen((e) => navigate(ViewType.list,null));
     return cancelButton;
   }
 
- void _saveDetails(Expense expense) {
+  void _saveDetails(Expense expense) {
     InputElement dateEl = document.getElementById('expenseDate');
     InputElement amountEl = document.getElementById('expenseAmount');
     TextAreaElement detailEl = document.getElementById('expenseDetail');
     SelectElement typeEl = document.getElementById('expenseTypes');
+    final actionNode = document.getElementsByName('action');
 
     if (dateEl.value != '') {
       expense.date = DateTime.parse(dateEl.value);
@@ -84,15 +87,64 @@ class EditView implements View {
       expense.type = app.expenseTypes[typeCode];
     }
 
+    if (actionNode != null && actionNode.isNotEmpty) {
+      for (var item in actionNode) {
+        final CheckboxInputElement checkBox = item;
+        Action action;
+        for (var actionItem in expense.itemActions) {
+          if (actionItem.name == checkBox.value) {
+            action = actionItem;
+            break;
+          }
+        }
+        final itemActions = expense.itemActions;
+        if (!checkBox.checked) {
+          itemActions.remove(action);
+        } else {
+          itemActions.add(Action.getAction(checkBox.value));
+        }
+      } //for
+    }
+
     print(expense.toJson());
     app.addOrUpdate(expense);
   }
 }
 
 // UTILITY FUNCTIONS
+String _getActions(Set<Action> actionList) {
+  final result = StringBuffer();
+  // edit
+  
+  _addActionEditCheckBox(result);
+
+  // delete
+  _addCheckBox(result, actionList, Action.delete);
+
+  return result.toString();
+}
+
+void _addActionEditCheckBox(StringBuffer result) {
+  var item = Action.edit;
+  result.write(
+      '<label><input type="checkbox" name="action" disabled checked value="${item.name}">${item.name.substring(0, 1).toUpperCase()}${item.name.substring(1, item.name.length)}</label><br>');
+}
+
+void _addCheckBox(StringBuffer result, Set<Action> actionList, Action item) {
+  var checked = '';
+  if (actionList.contains(item)) {
+    checked = 'checked';
+  }
+  _buildCheckBoxContent(result, checked, item);
+}
+
+void _buildCheckBoxContent(StringBuffer result, String checked, Action item) {
+  result.write(
+      '<label><input type="checkbox" name="action" $checked value="${item.name}">${item.name.substring(0, 1).toUpperCase()}${item.name.substring(1, item.name.length)}</label><br>');
+}
 
 String _getOptions(ExpenseType selectedExpenseType) {
-  var result = StringBuffer();
+  final result = StringBuffer();
   result.write('<option value=' '>&nbsp</option>');
   for (var et in app.expenseTypes.values) {
     if (et == selectedExpenseType) {
@@ -112,9 +164,9 @@ String _getDate(DateTime expenseDate) {
   var dateElementString = '';
 
   if (expenseDate != null) {
-    var year = _blankIfNull(expenseDate.year);
-    var month = _getMonth(_blankIfNull(expenseDate.month));
-    var day = _getDay(_blankIfNull(expenseDate.day));
+    final year = _blankIfNull(expenseDate.year);
+    final month = _getMonth(_blankIfNull(expenseDate.month));
+    final day = _getDay(_blankIfNull(expenseDate.day));
     dateElementString =
         "<input type='date' id='expenseDate' value='$year-$month-$day'>";
   } else {

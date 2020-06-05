@@ -12,43 +12,37 @@ class ListView implements View {
   DivElement actions;
 
   ListView(List<Expense> expenses) {
-    refreshUi(expenses);
+    refreshUi_usingDynamicTable(expenses);
     _buildActions();
   }
+  static const title = 'title';
+  static const css_class = 'class';
+  static const map_key = 'key';
+  static const map_value = 'value';
 
-  void refreshUi(List<Expense> expenses) {
-    _updateRootElement();
-
-    var tableElement = TableElement();
-    var head = tableElement.createFragment('''
-          <thead>
-            <td class="type">Type</td>
-            <td class="date">Date</td>
-            <td class="detail">Item</td>
-            <td class="amount">Amount</td>
-            <td class="claimed">Claimed?</td>
-            <td class="edit">&nbsp;</td>
-          </thead>''');
-
-    // tableElement.children.add(head);
-    tableElement.nodes.addAll(head.nodes);
-    for (var ex in expenses) {
-      tableElement.children.add(_getRowElement(ex));
-    }
-
-    rootElement.children.add(tableElement);
-  }
+  static const titleInfo = <String, Map<String, String>>{
+    'type': <String, String>{title: 'Type', css_class: 'type'},
+    'date': <String, String>{title: 'Date', css_class: 'date'},
+    'detail': <String, String>{title: 'Detail', css_class: 'detail'},
+    'amount': <String, String>{title: 'Amount', css_class: 'amount'},
+    'claimed': <String, String>{title: 'Claimed?', css_class: 'claimed'},
+    'edit': <String, String>{title: '&nbsp;', css_class: 'edit'},
+    'delete': <String, String>{title: '&nbsp;', css_class: 'delete'},
+  };
 
   void refreshUi_usingDynamicTable(List<Expense> expenses) {
     _updateRootElement();
 
     var columnConfig = <String, GetValueFunc>{};
-    columnConfig['type'] = (expense) => expense.type.name;
-    columnConfig['date'] = (expense) => expense.date.toString();
-    columnConfig['detail'] = (expense) => expense.detail;
-    columnConfig['amount'] = (expense) => expense.amount.toString();
-
-    var tableElement = getDynamicTable(expenses, columnConfig);
+    columnConfig['type'] = (Expense expense) => expense.type.name;
+    columnConfig['date'] = (Expense expense) => expense.date.toString();
+    columnConfig['detail'] = (Expense expense) => expense.detail;
+    columnConfig['amount'] = (Expense expense) => expense.amount.toString();
+    columnConfig['isClaimed'] =
+        (Expense expense) => expense.isClaimed.toString();
+    columnConfig['itemAction'] =
+        (Expense expense) => expense.itemActions.toString();
+    final tableElement = getDynamicTable(expenses, columnConfig);
 
     rootElement.children.add(tableElement);
   }
@@ -66,7 +60,7 @@ class ListView implements View {
     actions = DivElement();
     actions.onClick.listen((MouseEvent event) {
       print('actions click');
-      // event.stopPropagation();
+      event.stopPropagation();
     }, cancelOnError: false);
 
     actions.children.add(_getAddButton());
@@ -76,12 +70,13 @@ class ListView implements View {
 
   ButtonElement _getAddButton() {
     final addButton = ButtonElement();
-    addButton.text = 'Add...';
-    addButton.onClick.listen((e) {
-      print('add clicked');
-      navigate(ViewType.EDIT, null);
-      e.stopImmediatePropagation();
-    }); // null value passed in means add
+    addButton
+      ..text = 'Add...'
+      ..onClick.listen((MouseEvent event) {
+        print('add clicked');
+        navigate(ViewType.edit, null);
+        event.stopImmediatePropagation();
+      }); // null value passed in means add
 
     addButton.onClick.listen((e) => print('second event handler'));
 
@@ -90,49 +85,18 @@ class ListView implements View {
 
   ButtonElement _getClaimButton() {
     final claimButton = ButtonElement();
-    claimButton.text = 'Claim All';
-    claimButton.disabled = true;
+    claimButton
+      ..text = 'Claim All'
+      ..disabled = true;
     return claimButton;
   }
 
+
   ButtonElement _getSyncButton() {
     final syncButton = ButtonElement();
-    syncButton.text = 'Sync';
-    syncButton.disabled = true;
+    syncButton
+      ..text = 'Sync'
+      ..disabled = true;
     return syncButton;
   }
-}
-
-// UTILITY FUNCTIONS
-
-TableRowElement _getRowElement(Expense ex) {
-  TableRowElement row = Element.tag('tr');
-  
-  row.nodes.add(row.createFragment('<td>${ex.type.name}</td>'));
-  row.nodes.add(
-      row.createFragment('<td>${ex.date.day}-${ex.date.month}-${ex.date.year}</td>'));
-  row.nodes.add(row.createFragment('<td>${ex.detail}</td>'));
-  row.nodes.add(row.createFragment('<td>${ex.amount}</td>'));
-  row.nodes.add(row.createFragment('<td>${_getIsClaimed(ex.isClaimed)}</td>'));
-
-  var editCol =
-      row.createFragment("<td class='edit'></td>");
-  final button = ButtonElement();
-  button.text = 'Edit...';
-  editCol.children.add(button);
-  row.nodes.add(editCol);
-
-  button.onClick.listen((e) {
-    navigate(ViewType.EDIT, ex.id);
-  });
-
-  return row;
-}
-
-String _getIsClaimed(bool isClaimed) {
-  if (isClaimed) {
-    return 'Claimed';
-  }
-
-  return '';
 }

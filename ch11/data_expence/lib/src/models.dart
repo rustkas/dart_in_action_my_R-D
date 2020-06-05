@@ -13,11 +13,13 @@ class Expense<K, V> implements JsonSerializable, Map {
   num amount = 0;
   String detail;
   bool isClaimed = false;
+  List<Action> itemActions;
 
   /// ctor
   /// set the next id value
   Expense() {
     _id = _getNextId();
+    itemActions = [];
   }
 
   Map toMap() {
@@ -32,6 +34,7 @@ class Expense<K, V> implements JsonSerializable, Map {
     if (type != null) {
       map['expenseType'] = type.toMap();
     }
+    map['expenseActions'] = itemActions;
     return map;
   }
 
@@ -51,6 +54,12 @@ class Expense<K, V> implements JsonSerializable, Map {
       final expenseTypeMap = values['expenseType'];
       type = ExpenseType(expenseTypeMap['name'], expenseTypeMap['code']);
     }
+    if (values.containsKey('expenseActions')) {
+      itemActions = <Action>[];
+      for (var item in values['expenseActions']) {
+        itemActions.add(Action(item['name']));
+      }
+    }
   }
 
   Expense.fromMap(Map map) {
@@ -66,12 +75,15 @@ class Expense<K, V> implements JsonSerializable, Map {
 
       type = ExpenseType(expenseTypeMap['name'], expenseTypeMap['code']);
     }
+    if (map.containsKey('expenseActions')) {
+      itemActions = map['expenseActions'];
+    }
   }
 
   /// convert the object into a json string
   @override
   String toJson() {
-    return JsonEncoder().convert(toMap());
+    return jsonEncode(toMap());
   }
 
   @override
@@ -87,7 +99,7 @@ class Expense<K, V> implements JsonSerializable, Map {
   /// Map implementation methods:
   @override
   List get keys {
-    return ['id', 'amount', 'expenseType', 'date', 'detail', 'isClaimed'];
+    return ['id', 'amount', 'expenseType', 'date', 'detail', 'isClaimed','expenseActions'];
   }
 
   @override
@@ -102,9 +114,12 @@ class Expense<K, V> implements JsonSerializable, Map {
       return date == null ? null : date.toString();
     } else if (key == 'detail') {
       return detail;
-    } else if (key == 'isClaimed') {
+    } else if (key == 'expenseActions') {
+      return itemActions;
+    }else if (key == 'isClaimed') {
       return isClaimed;
-    } else {
+    }
+     else {
       return null;
     }
   }
@@ -221,5 +236,23 @@ class ExpenseType {
     map['name'] = name;
     map['code'] = code;
     return map;
+  }
+}
+
+/// Used to list the types of actions
+class Action {
+  final String name;
+  const Action(this.name);
+  @override
+  String toString() {
+    return '$name';
+  }
+
+  @override
+  bool operator ==(other) {
+    if (other is Action) {
+      return name == other.name;
+    }
+    return false;
   }
 }

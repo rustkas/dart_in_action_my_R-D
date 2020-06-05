@@ -47,7 +47,7 @@ class AppController {
 
       navigate(viewType, id);
     } else {
-      navigate(ViewType.LIST, null);
+      navigate(ViewType.list, null);
     }
   }
 
@@ -64,7 +64,7 @@ class AppController {
   }
 
   void showMessage(String message) {
-    // TODO: Implement this - such as 'Your expense has been saved'
+    print(message);
   }
 
   void hideMessage() {
@@ -83,7 +83,6 @@ class AppController {
 
     return result;
   }
-
 }
 
 abstract class View {
@@ -96,8 +95,8 @@ class ViewType {
 
   const ViewType(this.name);
 
-  static ViewType LIST = const ViewType('list');
-  static ViewType EDIT = const ViewType('edit');
+  static ViewType list = const ViewType('list');
+  static ViewType edit = const ViewType('edit');
 
   @override
   String toString() => name;

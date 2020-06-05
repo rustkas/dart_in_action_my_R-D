@@ -25,10 +25,10 @@ void navigate(ViewType viewType, int id, [bool fromPopState = false]) {
   // update browser title
   document.title = 'DartExpense: $state';
 
-  if (viewType == ViewType.LIST) {
+  if (viewType == ViewType.list) {
     print('Navigate: List');
     app.updateView(ListView(app.expenses));
-  } else if (viewType == ViewType.EDIT) {
+  } else if (viewType == ViewType.edit) {
     print('Navigate: Edit');
     app.updateView(EditView(app.getExpenseById(id)));
   }

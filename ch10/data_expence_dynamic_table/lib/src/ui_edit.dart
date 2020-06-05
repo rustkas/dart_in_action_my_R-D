@@ -32,8 +32,9 @@ class EditView implements View {
         <label for='expenseDate'>Date</label>${_getDate(_expense.date)}<br/>
         <label for='expenseAmount'>Amount</label>${_getAmount(_expense.amount)}</br>
         <label for='expenseDetail'>Detail</label>${_getDetail(_expense.detail)}  
+        <fieldset><legend>Row actions</legend>${_getActions(_expense.itemActions)}</fieldset>
       </div>
-          ''');
+      ''');
   }
 
   void _buildActions() {
@@ -52,7 +53,6 @@ class EditView implements View {
         _saveDetails(_expense);
         navigate(ViewType.list, null, 'Expense was saved');
       });
-
     return saveButton;
   }
 
@@ -69,6 +69,7 @@ class EditView implements View {
     InputElement amountEl = document.getElementById('expenseAmount');
     TextAreaElement detailEl = document.getElementById('expenseDetail');
     SelectElement typeEl = document.getElementById('expenseTypes');
+    final actionNode = document.getElementsByName('action');
 
     if (dateEl.value != '') {
       expense.date = DateTime.parse(dateEl.value);
@@ -86,12 +87,61 @@ class EditView implements View {
       expense.type = app.expenseTypes[typeCode];
     }
 
+    if (actionNode != null && actionNode.isNotEmpty) {
+      for (var item in actionNode) {
+        final CheckboxInputElement checkBox = item;
+        Action action;
+        for (var actionItem in expense.itemActions) {
+          if (actionItem.name == checkBox.value) {
+            action = actionItem;
+            break;
+          }
+        }
+        final itemActions = expense.itemActions;
+        if (!checkBox.checked) {
+          itemActions.remove(action);
+        } else {
+          itemActions.add(Action.getAction(checkBox.value));
+        }
+      } //for
+    }
+
     print(expense.toJson());
     app.addOrUpdate(expense);
   }
 }
 
 // UTILITY FUNCTIONS
+String _getActions(Set<Action> actionList) {
+  final result = StringBuffer();
+  // edit
+  
+  _addActionEditCheckBox(result);
+
+  // delete
+  _addCheckBox(result, actionList, Action.delete);
+
+  return result.toString();
+}
+
+void _addActionEditCheckBox(StringBuffer result) {
+  var item = Action.edit;
+  result.write(
+      '<label><input type="checkbox" name="action" disabled checked value="${item.name}">${item.name.substring(0, 1).toUpperCase()}${item.name.substring(1, item.name.length)}</label><br>');
+}
+
+void _addCheckBox(StringBuffer result, Set<Action> actionList, Action item) {
+  var checked = '';
+  if (actionList.contains(item)) {
+    checked = 'checked';
+  }
+  _buildCheckBoxContent(result, checked, item);
+}
+
+void _buildCheckBoxContent(StringBuffer result, String checked, Action item) {
+  result.write(
+      '<label><input type="checkbox" name="action" $checked value="${item.name}">${item.name.substring(0, 1).toUpperCase()}${item.name.substring(1, item.name.length)}</label><br>');
+}
 
 String _getOptions(ExpenseType selectedExpenseType) {
   final result = StringBuffer();
