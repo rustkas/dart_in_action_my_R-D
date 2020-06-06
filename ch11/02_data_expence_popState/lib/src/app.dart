@@ -37,10 +37,10 @@ class AppController {
     _uiRoot.children.add(footer);
   }
 
-  void loadFirstView() {
-    final view = ListView(expenses);
-    updateView(view);
-  }
+  // void loadFirstView() {
+  //   final view = ListView(expenses);
+  //   updateView(view);
+  // }
 
   void updateView(View view) {
     _content.children
