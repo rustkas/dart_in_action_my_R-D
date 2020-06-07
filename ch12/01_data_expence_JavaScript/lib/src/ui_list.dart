@@ -56,10 +56,11 @@ class ListView implements View {
     }
   }
 
-   void _buildActions() {
+  void _buildActions() {
     actions = DivElement();
 
-    actions.children..add(_getAddButton());
+    actions.children
+      ..add(_getAddButton());
   }
 
   ButtonElement _getAddButton() {
@@ -73,4 +74,5 @@ class ListView implements View {
 
     return addButton;
   }
+
 }

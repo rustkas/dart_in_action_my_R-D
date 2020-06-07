@@ -58,14 +58,8 @@ class ListView implements View {
 
   void _buildActions() {
     actions = DivElement();
-    actions.onClick.listen((MouseEvent event) {
-      print('actions click');
-      event.stopPropagation();
-    }, cancelOnError: false);
 
-    actions.children.add(_getAddButton());
-    actions.children.add(_getClaimButton());
-    actions.children.add(_getSyncButton());
+    actions.children..add(_getAddButton());
   }
 
   ButtonElement _getAddButton() {
@@ -73,29 +67,10 @@ class ListView implements View {
     addButton
       ..text = 'Add...'
       ..onClick.listen((MouseEvent event) {
-        print('add clicked');
         navigate(ViewType.edit, null);
         event.stopImmediatePropagation();
       }); // null value passed in means add
 
-    addButton.onClick.listen((e) => print('second event handler'));
-
     return addButton;
-  }
-
-  ButtonElement _getClaimButton() {
-    final claimButton = ButtonElement();
-    claimButton
-      ..text = 'Claim All'
-      ..disabled = true;
-    return claimButton;
-  }
-
-  ButtonElement _getSyncButton() {
-    final syncButton = ButtonElement();
-    syncButton
-      ..text = 'Sync'
-      ..disabled = true;
-    return syncButton;
   }
 }

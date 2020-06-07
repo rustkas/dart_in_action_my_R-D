@@ -49,14 +49,7 @@ class ListView implements View {
 
   void _buildActions() {
     actions = DivElement();
-    actions.onClick.listen((MouseEvent event) {
-      print('actions click');
-      event.stopPropagation();
-    }, cancelOnError: false);
-
-    actions.children.add(_getAddButton());
-    actions.children.add(_getClaimButton());
-    actions.children.add(_getSyncButton());
+    actions.children..add(_getAddButton());
   }
 
   ButtonElement _getAddButton() {
@@ -64,30 +57,11 @@ class ListView implements View {
     addButton
       ..text = 'Add...'
       ..onClick.listen((MouseEvent event) {
-        print('add clicked');
         navigate(ViewType.edit, null);
         event.stopImmediatePropagation();
       }); // null value passed in means add
 
-    addButton.onClick.listen((e) => print('second event handler'));
-
     return addButton;
-  }
-
-  ButtonElement _getClaimButton() {
-    final claimButton = ButtonElement();
-    claimButton
-      ..text = 'Claim All'
-      ..disabled = true;
-    return claimButton;
-  }
-
-  ButtonElement _getSyncButton() {
-    final syncButton = ButtonElement();
-    syncButton
-      ..text = 'Sync'
-      ..disabled = true;
-    return syncButton;
   }
 }
 
@@ -101,10 +75,11 @@ TableRowElement _getRowElement(Expense ex) {
         '<td>${ex.date.day}-${ex.date.month}-${ex.date.year}</td>'))
     ..add(row.createFragment('<td>${ex.detail}</td>'))
     ..add(row.createFragment('<td>${ex.amount}</td>'))
-  ..add(row.createFragment('<td>${_getIsClaimed(ex.isClaimed)}</td>'));
+    ..add(row.createFragment('<td>${_getIsClaimed(ex.isClaimed)}</td>'));
 
-  final editCol = row.createFragment("<td class='edit'><button>Edit...</button></td>");
-  
+  final editCol =
+      row.createFragment("<td class='edit'><button>Edit...</button></td>");
+
   final button = editCol.children.elementAt(0);
   row.nodes.add(editCol);
 

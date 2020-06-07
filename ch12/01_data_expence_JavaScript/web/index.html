@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="scaffolded-by" content="https://github.com/dart-lang/stagehand">
+    <title>DartExpense</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+    <script defer src="main.dart.js"></script>
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script>
+      window.addEventListener("message", receiveMessage);
+      function receiveMessage(event) {
+        try {
+          var data = JSON.parse(event.data);
+          try {
+            if (data["type"] == "dart2js") {
+              if (data["action"] == "chart") {
+                var chartData = data["payload"];
+                console.log("JS1: " + chartData);
+                loadPieChart(chartData);
+              }
+              else {
+                console.log("wrong type");
+              }
+            }
+          } catch (e) {
+            console.log(e);
+          }
+        } catch (e) {
+          // ignoring irrelevant messages
+        }
+      }
+
+      function loadPieChart(chartData) {
+        console.log("loadCharts");
+        google.load("visualization", "1", { packages: ["corechart"], callback: drawChart });
+
+        function drawChart() {
+          console.log(chartData);
+          var data = google.visualization.arrayToDataTable(chartData);
+
+          var options = {
+            title: 'Expense Types'
+          };
+
+          var divElement = document.getElementById("chartView");
+          var chart = new google.visualization.PieChart(divElement);
+          chart.draw(data, options);
+          sendToDart("chartComplete", "finished");
+        }
+      }
+
+      function sendToDart(action, payload) {
+        var data = {};
+        data["type"] = "js2dart";
+        data["action"] = action;
+        data["payload"] = payload;
+        var jsonData = JSON.stringify(data);
+        window.postMessage(jsonData, window.location.href);
+      }
+
+    </script>
+</head>
+
+<body>
+
+  <div id="dartexpense"></div>
+
+</body>
+</html>
