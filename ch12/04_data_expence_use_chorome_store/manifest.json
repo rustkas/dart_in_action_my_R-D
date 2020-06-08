@@ -1,0 +1,27 @@
+{
+  // Required
+  "manifest_version": 2,
+  "name": "Dart Expense",
+  "version": "0.0.1",
+  
+  // Recommended
+  "description": "A lightweight Google Chrome extension for Twitter",
+  "icons": {
+    "128": "img/icon_128.png"
+  },
+  
+  // Pick one
+  "browser_action": {
+    "default_icon": "icon_258.png",
+    "default_popup": "http://127.0.0.1:8080/"
+  },
+  "background":{
+	"persistent":false
+  },
+  "homepage_url": "http://127.0.0.1:8080/",
+  "permissions": [
+    "*://www.google.com/",
+    "*://openexchangerates.org",
+    "unlimitedStorage"
+  ]
+}
