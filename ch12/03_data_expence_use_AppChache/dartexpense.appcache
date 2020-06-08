@@ -1,0 +1,14 @@
+CACHE MANIFEST
+#V2
+
+CACHE:
+/favicon.ico
+/styles.css
+/index.html
+/main.dart.js
+
+NETWORK:
+http://www.google.com/jsapi
+
+FALLBACK:
+http://openexchangerates.org/api/latest.json /offline.json

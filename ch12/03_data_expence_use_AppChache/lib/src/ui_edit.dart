@@ -133,13 +133,16 @@ class EditView implements View {
           onMessage.cancel();
           InputElement amountEl = document.getElementById('expenseAmount');
           final dollarValue = double.parse(amountEl.value);
-          // print(data);
+
           final payload = data['payload'];
           final rubRate = payload['rates']['RUB'] as double;
           final rubValue = dollarValue * rubRate;
           // print(
           //     'dollarValue = $dollarValue, rubRate = $rubRate, rubValue = $rubValue');
           amountEl.value = rubValue.toStringAsFixed(2);
+          if (window.navigator.onLine == false) {
+            window.alert('Для получения обменных курсов подключитесь к сети');
+          }
         }
       }
 
