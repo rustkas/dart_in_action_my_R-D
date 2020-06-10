@@ -1,11 +1,11 @@
 import 'dart:io';
 
-String _host = InternetAddress.loopbackIPv6.host;
-int _port = 8080;
+import 'package:static_server/static_server.dart';
+
 Future main() async {
   HttpServer server;
   try {
-    server = await HttpServer.bind(_host, _port);
+    server = await HttpServer.bind(host, port);
 
     print('Listening on ${server.address.host}:${server.port}...');
 
@@ -15,6 +15,7 @@ Future main() async {
       path = req.requestedUri.path;
       contentType = getConentType(path);
       if (!matchPath(path)) {
+        print('reject $path');
         continue;
       }
       final reqFilePath = './client${req.requestedUri.path}';
@@ -26,7 +27,6 @@ Future main() async {
       var data;
       if (contentType == ContentType.binary) {
         data = await file.readAsBytes();
-        
       } else {
         data = await file.readAsString();
       }
@@ -39,34 +39,10 @@ Future main() async {
       await req.response.close();
     }
   } catch (e) {
-    print('Couldn\'t bind to port $_port: $e');
+    print('Couldn\'t bind to port $port: $e');
   }
 }
 
-bool matchPath(String path) {
-  path = path.toLowerCase();
-  return path.endsWith('.html') ||
-      path.endsWith('.dart') ||
-      path.endsWith('.css') ||
-      path.endsWith('.js') ||
-      path.endsWith('.ico') ||
-      path.endsWith('.png') ||
-      path.endsWith('.jpg') ||
-      path.endsWith('.json');
-}
-
-ContentType getConentType(String path) {
-  path = path.toLowerCase();
-  if (path.endsWith('.html')) {
-    return ContentType.html;
-  } else if (path.endsWith('.json')) {
-    return ContentType.json;
-  } else if (path.endsWith('.ico') ||
-      path.endsWith('.png') ||
-      path.endsWith('.jpg')) {
-    return ContentType.binary;
-  }
-  return ContentType.text;
-}
 // dart bin/main.dart
 // localhost:8080/index.html
+// // localhost:8080/index.html

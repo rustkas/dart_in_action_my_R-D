@@ -15,7 +15,7 @@ void main(List<String> arguments) {
   final options = parser.parse(arguments);
   //print(options.arguments);
   if (options.arguments.length != 2) {
-    //printHelp();
+    printHelp(true);
   }
 }
 
@@ -30,10 +30,6 @@ void printHelp(bool pass) {
     print('Dart Directory Lister');
     print(parser.usage);
   }
-}
-
-void outputFile(String filePath) {
-  print(filePath);
 }
 
 ArgParser makeArgParser() {
@@ -98,3 +94,4 @@ void printFile(String filePath) {
 // dart bin/main.dart --out dart/options.dart
 // dart bin/main.dart --out bin/main.dart
 // dart bin/main.dart --help
+// dart bin/main.dart --list dart

@@ -1,7 +1,6 @@
 /// Print folder's content.
 /// Relative path.
 /// Usign option's callback
-/// Using print file content by 'print' function
 
 import 'dart:io';
 
@@ -9,22 +8,17 @@ import 'package:args/args.dart';
 
 final parser = makeArgParser();
 
-/// stup for privent double printing help information
+/// stup for privent double print help information
 var getHelp = false;
 void main(List<String> arguments) {
   final options = parser.parse(arguments);
   //print(options.arguments);
   if (options.arguments.length != 2) {
-    printHelp(true);
+    printHelp();
   }
 }
 
-void printHelp(bool pass) {
-  // wrong calling. Just ignore it.
-  if (!pass) {
-    return;
-  }
-
+void printHelp([bool ok]) {
   if (!getHelp) {
     getHelp = true;
     print('Dart Directory Lister');
@@ -41,14 +35,13 @@ ArgParser makeArgParser() {
 
   parser.addOption('list',
       help: 'List files and directories: --list DIR', callback: printDir);
-  parser.addOption('out',
-      help: 'Output file to console : --out FILE', callback: printFile);
-  parser.addFlag('help', help: 'Get help', abbr: 'h', callback: printHelp);
+  parser.addOption('out', help: 'Output file to console : --out FILE');
+  parser.addFlag('help',
+      help: 'Get help', abbr: 'h', negatable: false, callback: printHelp);
   return parser;
 }
 
 void printDir(String folderPath) {
-  // wrong calling. Just ignore it.
   if (null == folderPath) {
     return;
   }
@@ -100,9 +93,5 @@ void printFile(String filePath) {
     }
   });
 }
-
-
-// dart bin/main.dart --out dart/options.dart
-// dart bin/main.dart --out bin/main.dart
-// dart bin/main.dart --out dart
+// dart bin/main.dart --list dart
 // dart bin/main.dart --help
