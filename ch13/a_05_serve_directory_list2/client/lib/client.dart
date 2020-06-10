@@ -66,9 +66,7 @@ void _updateFileList(List files) {
         });
         link.classes.add('selected');
       }
-      document.getElementById('filename')
-        //..classes.add('selected')
-        ..text = '$fileName';
+      document.getElementById('filename').text = '$fileName';
 
       final url = 'http://127.0.0.1:4040/file$filePath';
       HttpRequest.getString(url).then((responce) {
@@ -76,7 +74,6 @@ void _updateFileList(List files) {
         contentText = jsonDecode(jsonData)['content'];
         TextAreaElement fileContent = document.getElementById('fileContent');
         fileContent.value = contentText;
-        // document.getElementById('fileContent').text = contentText;
       }).catchError((e) {
         print('Got error: ${e.error}');
         return -1;
@@ -97,10 +94,16 @@ void addSaveOnClickListener() {
     final fileContent =
         (document.getElementById('fileContent') as TextAreaElement).value;
     final url = 'http://127.0.0.1:4040/file$filePath';
+
+    // Data content map
     final data = <String, String>{'fileContent': fileContent};
+
+    //Header settings
     final requestHeaders = <String, String>{
       'Content-Type': 'text/plain; charset=UTF-8'
     };
+
+    // Send POST request
     HttpRequest.request(url,
             method: 'POST',
             withCredentials: false,
@@ -108,20 +111,22 @@ void addSaveOnClickListener() {
             requestHeaders: requestHeaders,
             sendData: data,
             onProgress: null)
-        .whenComplete(() {
-    }).then((request) {
-      if (request.response is bool) {
-        if (request.response as bool) {
+        .then((request) {
+      // set default GUI settings
+      // to privent file content editiing
+      try {
+        if ((request.response as String).toLowerCase() == 'ok') {
           ButtonElement saveButton = document.getElementById('saveButton');
           saveButton.disabled = true;
         }
+      } catch (e) {
+        print(e);
       }
     });
   });
 }
 
 void addFileContentMakeChangesListener() {
-  // var filePath = document.getElementById('filename');
   TextAreaElement fileContent = document.getElementById('fileContent');
   fileContent.onInput.listen((Event event) {
     if (contentText != fileContent.text) {
