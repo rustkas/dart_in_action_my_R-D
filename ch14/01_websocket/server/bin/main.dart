@@ -6,17 +6,23 @@ import 'package:server/static_server.dart';
 Future main() async {
   final connections = <int, WebSocket>{};
 
+  /// Utf8 encoder instance
+  const utf8 = Utf8Encoder();
+
+  /// Container of message for the clients
+  final data = {'action': 'CLIENT_COUNT_REFRESH', 'connectedClients': 0};
+
+  /// Client messages sending
   void sendUpdatedConnectionCount() {
-    final data = {};
-    data['action'] = 'CLIENT_COUNT_REFRESH';
     data['connectedClients'] = connections.length;
     final message = jsonEncode(data);
 
     for (var clientConnection in connections.values) {
-      clientConnection.addUtf8Text(Utf8Encoder().convert(message));
+      clientConnection.addUtf8Text(utf8.convert(message));
     }
   }
 
+  /// WebSocker listener
   void onWebSocketData(WebSocket client) async {
     var key = client.hashCode;
     if (!connections.containsKey(key)) {
@@ -48,4 +54,3 @@ Future main() async {
 
 // dart bin/main.dart
 // localhost:8080
-

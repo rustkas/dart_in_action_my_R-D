@@ -3,6 +3,10 @@ import 'dart:html';
 
 import 'data_access.dart';
 import 'models.dart';
+import 'models.dart';
+import 'models.dart';
+import 'models.dart';
+import 'navigate.dart';
 import 'navigate.dart';
 import 'ui_edit.dart';
 import 'ui_list.dart';
@@ -90,6 +94,21 @@ class AppController {
   void addOrUpdate(Expense expense) {
     //add it to the list if it's not already there.
     _appData.addOrUpdate(expense);
+    
+  }
+
+  void syncItem(Expense expense) {
+    if (expense == null) {
+      return;
+    }
+    final data = {
+      'action': 'SYNC',
+      'expense': expense.toJson(),
+      'nextId': Expense.currentHighestId
+    };
+    final jsonData = jsonEncode(data);
+
+    _webSocket.sendString(jsonData);
   }
 
   Expense getExpenseById(int id) {
@@ -134,9 +153,24 @@ class AppController {
 
       final data = jsonDecode(message.data);
 
-      if (data is Map && data['action'] == 'CLIENT_COUNT_REFRESH') {
-        _conectedClients = data['connectedClients'];
-        refreshFooterStatus();
+      if (!(data is Map)) {
+        return;
+      }
+      switch (data['action']) {
+        case 'CLIENT_COUNT_REFRESH':
+          _conectedClients = data['connectedClients'];
+          refreshFooterStatus();
+          break;
+        case 'SYNC':
+          final expenseJSON = data['expense'];
+          var expense = Expense.fromJson(expenseJSON);
+          Expense.currentHighestId = data['nextId'] as int;
+          addOrUpdate(expense);
+          navigate(ViewType.list, null);
+          break;
+        default:
+          throw UnimplementedError(
+              'Action ${data["action"]} is not implemented');
       }
     });
   }
@@ -185,7 +219,6 @@ class ViewType {
 
   @override
   String toString() => name;
-
 }
 
 AppController _app;
