@@ -13,6 +13,19 @@ const utf8 = Utf8Encoder();
 /// Container of message for the clients
 final data = {'action': 'CLIENT_COUNT_REFRESH', 'connectedClients': 0};
 
+var server;
+
+Future<void> webSocketServer() async {
+  try {
+    server = await HttpServer.bind('127.0.0.1', port);
+    server.transform(WebSocketTransformer()).listen(onWebSocketData);
+    print('listening...');
+  } catch (e) {
+    print('Couldn\'t bind to port $port: $e');
+  }
+}
+
+
 /// Client messages sending
 void sendUpdatedConnectionCount() {
   data['connectedClients'] = connections.length;
@@ -54,14 +67,3 @@ void onWebSocketData(WebSocket client) async {
   }
 }
 
-var server;
-
-Future<void> webSocketServer() async {
-  try {
-    server = await HttpServer.bind('127.0.0.1', port);
-    server.transform(WebSocketTransformer()).listen(onWebSocketData);
-    print('listening...');
-  } catch (e) {
-    print('Couldn\'t bind to port $port: $e');
-  }
-}
