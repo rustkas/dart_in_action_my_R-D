@@ -1,0 +1,1 @@
+To get more websocket exampels go to the project [WebSockets](https://github.com/rustkas/Websocket-examples)
