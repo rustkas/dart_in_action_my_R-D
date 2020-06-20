@@ -1,1 +1,1 @@
-## Using CouchDB for data location
+## Using CouchDB as a storage
