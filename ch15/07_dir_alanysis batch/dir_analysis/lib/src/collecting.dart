@@ -30,12 +30,15 @@ Future<List<String>> getFileList(String folderPath) {
   return completer.future;
 }
 
+
 // Analyze files in the list recursively
 Future<void> analyzeFileList(List<String> fileList) async {
   var counter = 0;
   final receivePort = ReceivePort();
 
-  await Isolate.spawn(_getFileTypesEntryPoint, receivePort.sendPort);
+  var i1 = await Isolate.spawn(_getFileTypesEntryPoint, receivePort.sendPort);
+  i1.controlPort;
+
   await Isolate.spawn(_getFileSizesEntryPoint, receivePort.sendPort);
 
   receivePort.listen((results) async {
@@ -45,7 +48,7 @@ Future<void> analyzeFileList(List<String> fileList) async {
       results.forEach((key, value) {
         print('${key}\t|\t${value}');
       });
-      
+
       counter++;
       if (counter >= 2) {
         receivePort.close();
