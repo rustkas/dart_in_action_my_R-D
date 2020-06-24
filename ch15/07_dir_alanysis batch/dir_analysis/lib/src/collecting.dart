@@ -30,18 +30,19 @@ Future<List<String>> getFileList(String folderPath) {
   return completer.future;
 }
 
+Isolate fileTypes;
+Isolate fileSizes;
 
 // Analyze files in the list recursively
 Future<void> analyzeFileList(List<String> fileList) async {
   var counter = 0;
   final receivePort = ReceivePort();
 
-  var i1 = await Isolate.spawn(_getFileTypesEntryPoint, receivePort.sendPort);
-  i1.controlPort;
-
-  await Isolate.spawn(_getFileSizesEntryPoint, receivePort.sendPort);
-
-  receivePort.listen((results) async {
+  fileTypes ??=
+      await Isolate.spawn(_getFileTypesEntryPoint, receivePort.sendPort);
+  fileSizes ??=
+      await Isolate.spawn(_getFileSizesEntryPoint, receivePort.sendPort);
+  var onData = (results) async {
     if (results is SendPort) {
       results.send(fileList);
     } else if (results is Map) {
@@ -54,7 +55,8 @@ Future<void> analyzeFileList(List<String> fileList) async {
         receivePort.close();
       }
     }
-  });
+  };
+  receivePort.listen(onData);
 }
 
 void _getFileTypesEntryPoint(SendPort sendPort) {
