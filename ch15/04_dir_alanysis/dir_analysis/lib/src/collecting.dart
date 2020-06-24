@@ -36,19 +36,7 @@ Isolate isolate2;
 
 // Analyze files in the list recursively
 Future<void> analyzeFileList(List<String> fileList) async {
-  // final typeCount = _getFileTypes(fileList);
-  // print('=== Type count ===');
-  // print('Type\t|\tCount');
-  // typeCount.forEach((key, value) {
-  //   print('${key}\t|\t${value}');
-  // });
-
-  // final totalSizes = _getFileSizes(fileList);
-  // print('=== Total sizes (in MB) ===');
-  // totalSizes.forEach((key, value) {
-  //   print('${key}\t|\t${value / 1024 / 1024}');
-  // });
-
+  
   final receivePort = ReceivePort();
   isolateName = 'Default isolate';
 
@@ -77,86 +65,4 @@ void getFileTypesEntryPoint(SendPort sendPort) {
 
 void getFileSizesEntryPoint(SendPort sendPort) {
   sendPort.send('FileSizes isolate');
-}
-
-//
-Map<String, int> _getFileTypes(List<String> fileList) {
-  var result = <String, int>{};
-  for (var fileName in fileList) {
-    if (FileSystemEntity.isDirectorySync(fileName)) {
-      _collectFileTypes(result, Directory(fileName).listSync());
-    } else {}
-    _collectFileTypeAndNumber(File(fileName), result);
-  }
-  return result;
-}
-
-Map<String, int> _getFileSizes(List<String> fileList) {
-  var result = <String, int>{};
-
-  for (var fileName in fileList) {
-    if (FileSystemEntity.isDirectorySync(fileName)) {
-      _collectFileSizes(result, Directory(fileName).listSync());
-    } else {
-      _collectFileSizeAndExtension(File(fileName), result);
-    }
-  }
-
-  return result;
-}
-
-Map<String, int> _collectFileTypes(
-    Map<String, int> result, List<FileSystemEntity> fileList) {
-  for (var item in fileList) {
-    if (FileSystemEntity.isDirectorySync(item.path)) {
-      _collectFileTypes(result, Directory(item.path).listSync());
-    } else {
-      _collectFileTypeAndNumber(item, result);
-    }
-  }
-  return result;
-}
-
-Map<String, int> _collectFileSizes(
-    Map<String, int> result, List<FileSystemEntity> fileList) {
-  for (var item in fileList) {
-    if (FileSystemEntity.isDirectorySync(item.path)) {
-      _collectFileSizes(result, Directory(item.path).listSync());
-    } else {
-      _collectFileSizeAndExtension(File(item.path), result);
-    }
-  }
-  return result;
-}
-
-void _collectFileTypeAndNumber(FileSystemEntity file, Map<String, int> result) {
-  final fileName = _getFileName(file);
-  final extension = _getFileExtension(fileName);
-  if (result.containsKey(extension)) {
-    result[extension]++;
-  } else {
-    result[extension] = 1;
-  }
-}
-
-void _collectFileSizeAndExtension(File file, Map<String, int> result) {
-  final fileName = _getFileName(file);
-  final extension = _getFileExtension(fileName);
-  final fileSize = file.lengthSync();
-  if (result.containsKey(extension)) {
-    result[extension] += fileSize;
-  } else {
-    result[extension] = fileSize;
-  }
-}
-
-/// Return file name
-String _getFileName(FileSystemEntity fileEntity) {
-  return (fileEntity.path.split(Platform.pathSeparator).last);
-}
-
-String _getFileExtension(String filename) {
-  var extSeparator = filename.lastIndexOf('.') + 1;
-  extSeparator = extSeparator == -1 ? 0 : extSeparator;
-  return filename.substring(extSeparator, filename.length).toLowerCase();
 }

@@ -23,8 +23,7 @@ Future<void> main(List<String> arguments) async {
     }
   }
 }
-// dart bin/main.dart "C:\work\armstrong"
-// dart bin/main.dart "C:\work\TGH26BC.htm"
-// dart bin/main.dart "C:\work\u2"
-// dart bin/main.dart "C:\work\pakages"
 // dart bin/main.dart "C:\work\u2" fileSize.dart fileTypes.dart
+
+
+

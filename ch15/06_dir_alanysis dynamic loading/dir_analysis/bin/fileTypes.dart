@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 /// Don't run this file directly, it is loaded dynamically.
-void main(List<String> message, SendPort sendPort) {
+Future<void>  main(List<String> message, SendPort sendPort) async {
   
   if (sendPort != null) {
     _getFileTypesEntryPoint(sendPort);

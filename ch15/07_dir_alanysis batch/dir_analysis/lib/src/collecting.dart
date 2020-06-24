@@ -12,7 +12,7 @@ Future<List<String>> getFileList(String folderPath) {
   if (!FileSystemEntity.isDirectorySync(folderPath)) {
     completer.complete(null);
   } else {
-// this is an example of using Directory.fromRawPath factory
+    // this is an example of using Directory.fromRawPath factory
     final directory = Directory.fromRawPath(utf8Encoder.convert(folderPath));
     directory.exists().then((bool exists) {
       if (!exists) {
@@ -30,18 +30,13 @@ Future<List<String>> getFileList(String folderPath) {
   return completer.future;
 }
 
-Isolate fileTypes;
-Isolate fileSizes;
-
 // Analyze files in the list recursively
 Future<void> analyzeFileList(List<String> fileList) async {
   var counter = 0;
   final receivePort = ReceivePort();
 
-  fileTypes ??=
-      await Isolate.spawn(_getFileTypesEntryPoint, receivePort.sendPort);
-  fileSizes ??=
-      await Isolate.spawn(_getFileSizesEntryPoint, receivePort.sendPort);
+  await Isolate.spawn(_getFileTypesEntryPoint, receivePort.sendPort);
+  await Isolate.spawn(_getFileSizesEntryPoint, receivePort.sendPort);
   var onData = (results) async {
     if (results is SendPort) {
       results.send(fileList);
@@ -59,7 +54,7 @@ Future<void> analyzeFileList(List<String> fileList) async {
   receivePort.listen(onData);
 }
 
-void _getFileTypesEntryPoint(SendPort sendPort) {
+Future<void> _getFileTypesEntryPoint(SendPort sendPort) async {
   final receivePort = ReceivePort();
   sendPort.send(receivePort.sendPort);
 
@@ -72,15 +67,31 @@ void _getFileTypesEntryPoint(SendPort sendPort) {
   });
 }
 
-void _getFileSizesEntryPoint(SendPort sendPort) {
+Future<void> _getFileSizesEntryPoint(SendPort sendPort) async {
   final receivePort = ReceivePort();
   sendPort.send(receivePort.sendPort);
 
   receivePort.listen((fileList) {
     final totalSizes = _getFileSizes(fileList);
+
+    // tune result for pritty print
+    final newMap = totalSizes
+        .map((key, value) => MapEntry(key, format(value / 1024 / 1024)));
+
     print('=== Total sizes (in MB) ===');
-    sendPort.send(totalSizes);
+    print('Type\t|\tSize (MB)');
+    sendPort.send(newMap);
   });
+}
+
+/// Format doube to xx.xx sring format
+String format(double n) {
+  var fraction = n - n.toInt();
+  if (fraction == 0.0) {
+    return n.toString();
+  }
+  var twoDigitFraction = (fraction * 100).truncateToDouble().toInt();
+  return '${n.toInt()}.$twoDigitFraction';
 }
 
 //

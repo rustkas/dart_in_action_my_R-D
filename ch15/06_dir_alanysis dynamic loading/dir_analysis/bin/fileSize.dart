@@ -2,8 +2,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 // Don't run this file directly, it is loaded dynamically.
-void main(List<String> message, SendPort sendPort) {
-  
+Future<void> main(List<String> message, SendPort sendPort) async {
   if (sendPort != null) {
     _getFileSizesEntryPoint(sendPort);
   }
@@ -15,9 +14,25 @@ void _getFileSizesEntryPoint(SendPort sendPort) {
 
   receivePort.listen((fileList) {
     final totalSizes = _getFileSizes(fileList);
+
+    // tune result for pritty print
+    final newMap = totalSizes
+        .map((key, value) => MapEntry(key, format(value / 1024 / 1024)));
+
     print('=== Total sizes (in MB) ===');
-    sendPort.send(totalSizes);
+    print('Type\t|\tSize (MB)');
+    sendPort.send(newMap);
   });
+}
+
+/// Format doube to xx.xx sring format
+String format(double n) {
+  var fraction = n - n.toInt();
+  if (fraction == 0.0) {
+    return n.toString();
+  }
+  var twoDigitFraction = (fraction * 100).truncateToDouble().toInt();
+  return '${n.toInt()}.$twoDigitFraction';
 }
 
 Map<String, int> _getFileSizes(List<String> fileList) {

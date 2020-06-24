@@ -41,8 +41,17 @@ void analyzeFileList(List<String> fileList) {
   final totalSizes = _getFileSizes(fileList);
   print('=== Total sizes (in MB) ===');
   totalSizes.forEach((key, value) {
-    print('${key}\t|\t${value / 1024 / 1024}');
+    print('${key}\t|\t${format(value / 1024 / 1024)}');
   });
+}
+
+String format(double n) {
+  var fraction = n - n.toInt();
+  if (fraction == 0.0) {
+    return n.toString();
+  }
+  var twoDigitFraction = (fraction * 100).truncateToDouble().toInt();
+  return '${n.toInt()}.$twoDigitFraction';
 }
 
 //

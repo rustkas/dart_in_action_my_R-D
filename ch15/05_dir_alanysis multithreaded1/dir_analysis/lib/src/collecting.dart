@@ -41,7 +41,7 @@ Future<void> _doAction(Function(SendPort) action, List<String> fileList) async {
   final fileTypesReceivePort = ReceivePort();
 
   await Isolate.spawn(action, fileTypesReceivePort.sendPort);
-  
+
   fileTypesReceivePort.listen((results) async {
     if (results is SendPort) {
       results.send(fileList);
@@ -55,7 +55,7 @@ Future<void> _doAction(Function(SendPort) action, List<String> fileList) async {
   });
 }
 
-void _getFileTypesEntryPoint(SendPort sendPort) {
+Future<void> _getFileTypesEntryPoint(SendPort sendPort) async {
   final receivePort = ReceivePort();
   sendPort.send(receivePort.sendPort);
 
@@ -68,15 +68,31 @@ void _getFileTypesEntryPoint(SendPort sendPort) {
   });
 }
 
-void _getFileSizesEntryPoint(SendPort sendPort) {
+Future<void> _getFileSizesEntryPoint(SendPort sendPort) async {
   final receivePort = ReceivePort();
   sendPort.send(receivePort.sendPort);
 
   receivePort.listen((fileList) {
     final totalSizes = _getFileSizes(fileList);
+
+    // tune result for pritty print
+    final newMap = totalSizes
+        .map((key, value) => MapEntry(key, format(value / 1024 / 1024)));
+
     print('=== Total sizes (in MB) ===');
-    sendPort.send(totalSizes);
+    print('Type\t|\tSize');
+    sendPort.send(newMap);
   });
+}
+
+/// Format doube to xx.xx sring format
+String format(double n) {
+  var fraction = n - n.toInt();
+  if (fraction == 0.0) {
+    return n.toString();
+  }
+  var twoDigitFraction = (fraction * 100).truncateToDouble().toInt();
+  return '${n.toInt()}.$twoDigitFraction';
 }
 
 //
